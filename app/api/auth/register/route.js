@@ -36,6 +36,7 @@ const registerSchema = z.object({
 
   dob: z.coerce.date(),
   bloodGroup: z.string().optional().default(""),
+  gender: z.enum(["Male", "Female", "Other"]),
 });
 
 export async function POST(request) {
@@ -52,7 +53,7 @@ export async function POST(request) {
     if (existingUser) {
       return NextResponse.json(
         { success: false, message: "User with this email already exists" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -62,7 +63,7 @@ export async function POST(request) {
     const counter = await Counter.findOneAndUpdate(
       { name: "clubId" },
       { $inc: { seq: 1 } },
-      { new: true, upsert: true }
+      { new: true, upsert: true },
     );
 
     if (!counter) {
@@ -85,11 +86,12 @@ export async function POST(request) {
       efootballId: parsed.efootballId,
       dob: parsed.dob,
       bloodGroup: parsed.bloodGroup,
-      
+      gender: parsed.gender,
+
       // Nested Objects
       device: parsed.device,
       socialAccounts: parsed.socialAccounts,
-      
+
       // Initialize Stats (Required by your schema)
       stats: {
         totalMatch: 0,
@@ -100,8 +102,8 @@ export async function POST(request) {
         goalsAgainst: 0,
         goalDiff: 0,
         points: 0,
-        form: []
-      }
+        form: [],
+      },
     });
 
     // 7. Success Response
@@ -117,15 +119,14 @@ export async function POST(request) {
           role: newUser.role,
         },
       },
-      { status: 201 }
+      { status: 201 },
     );
-
   } catch (error) {
     // Handle Validation Errors
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, message: "Validation failed", errors: error.errors },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -133,7 +134,7 @@ export async function POST(request) {
     console.error("REGISTER_ERROR:", error);
     return NextResponse.json(
       { success: false, message: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

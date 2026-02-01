@@ -35,18 +35,33 @@ const devices = [
 ];
 
 // Helper to generate random stats
+// Helper to generate random stats
 const generateStats = () => {
   const totalMatch = Math.floor(Math.random() * 50) + 10; // 10 to 60 matches
   const win = Math.floor(Math.random() * (totalMatch - 5));
   const draw = Math.floor(Math.random() * (totalMatch - win));
   const loss = totalMatch - win - draw;
-  
-  const goalsFor = win * 2 + draw + Math.floor(Math.random() * 10);
-  const goalsAgainst = loss * 2 + draw + Math.floor(Math.random() * 5);
 
-  // Generate Form (Last 5 matches)
-  const results = ["W", "L", "D"];
-  const form = Array.from({ length: 5 }, () => results[Math.floor(Math.random() * 3)]);
+  const goalsFor = win * 2 + draw * 1 + Math.floor(Math.random() * 15); // Wins usually imply 2+ goals
+  const goalsAgainst = loss * 2 + draw * 1 + Math.floor(Math.random() * 10);
+
+  // Generate consistent form history
+  // Create an array with all results: W * win, D * draw, L * loss
+  const fullHistory: string[] = [
+    ...Array(win).fill("W"),
+    ...Array(draw).fill("D"),
+    ...Array(loss).fill("L"),
+  ];
+
+  // Shuffle the history to simulate a real match sequence
+  for (let i = fullHistory.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [fullHistory[i], fullHistory[j]] = [fullHistory[j], fullHistory[i]];
+  }
+
+  // Take the last 5 matches for the 'form'
+  // If total matches < 5, take whatever is available
+  const form = fullHistory.slice(-5);
 
   return {
     totalMatch,
@@ -56,8 +71,8 @@ const generateStats = () => {
     goalsFor,
     goalsAgainst,
     goalDiff: goalsFor - goalsAgainst,
-    points: (win * 3) + (draw * 1),
-    form
+    points: win * 3 + draw * 1,
+    form,
   };
 };
 
@@ -92,18 +107,19 @@ async function seed() {
           efootballId: `9${Math.floor(Math.random() * 100000000)}`,
           device: {
             name: device.name,
-            model: device.model
+            model: device.model,
           },
           avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${clubId}`, // Random avatar
           socialAccounts: {
             facebook: "https://facebook.com",
             twitter: "",
             youtube: "",
-            discord: ""
+            discord: "",
           },
           dob: new Date("2000-01-01"),
           bloodGroup: "O+",
-          stats: stats as any
+          gender: Math.random() > 0.1 ? "Male" : "Female",
+          stats: stats as any,
         });
 
         counter++;
@@ -119,7 +135,9 @@ async function seed() {
 
     console.log("✅ Seeding Complete!");
     console.log("-----------------------------------------");
-    console.log(`Administrator Login: administrator1@test.com / ${DEFAULT_PASS}`);
+    console.log(
+      `Administrator Login: administrator1@test.com / ${DEFAULT_PASS}`,
+    );
     console.log(`Member Login: member1@test.com / ${DEFAULT_PASS}`);
     console.log("-----------------------------------------");
 

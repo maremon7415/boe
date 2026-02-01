@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "seed": "ts-node -r tsconfig-paths/register -O '{\"module\":\"commonjs\"}' script/seed.ts",
+    "clean-users": "ts-node -r tsconfig-paths/register -O '{\"module\":\"commonjs\"}' script/clean-data.ts",
     "lint": "next lint"
   },
   "dependencies": {

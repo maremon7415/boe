@@ -5,7 +5,9 @@ import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { DataProvider } from "@/contexts/data-context"
+import { AuthProvider } from "@/contexts/auth-context"
 import { Suspense } from "react"
+import { Toaster } from "react-hot-toast"
 
 export const metadata: Metadata = {
   title: "Brotherhood of Excellence - Elite Gaming Club",
@@ -23,9 +25,12 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
         <Suspense fallback={null}>
-          <DataProvider>{children}</DataProvider>
+          <DataProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </DataProvider>
         </Suspense>
         <Analytics />
+        <Toaster position="top-center" reverseOrder={false} />
       </body>
     </html>
   )
