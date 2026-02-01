@@ -3,11 +3,11 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, type Variants } from "framer-motion"
 import { ChevronRight, Gamepad2, Trophy, Sparkles } from "lucide-react"
 
 // Simplified variants for mobile performance
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -18,7 +18,7 @@ const containerVariants = {
   },
 }
 
-const textRevealVariants = {
+const textRevealVariants: Variants = {
   hidden: { y: "100%", opacity: 0 },
   visible: {
     y: "0%",
@@ -30,7 +30,7 @@ const textRevealVariants = {
   },
 }
 
-const fadeInVariants = {
+const fadeInVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
@@ -40,9 +40,11 @@ const fadeInVariants = {
 }
 
 const HERO_IMAGES = [
-  "/esports-tournament-championship.jpg",
-  "/gaming-clash-tournament.jpg",
-  "/winter-esports-event.jpg",
+  "/hero1.jpg",
+  "/hero2.jpg",
+  "/hero3.jpg",
+  "/hero4.jpg",
+  "/hero5.jpg",
 ]
 
 export function HeroSection() {
@@ -66,7 +68,7 @@ export function HeroSection() {
   }, [])
 
   return (
-    <section className="relative h-[100dvh] min-h-[600px] flex flex-col overflow-hidden bg-background">
+    <section className="relative h-dvh min-h-[600px] flex flex-col overflow-hidden bg-background">
 
       {/* --- BACKGROUND LAYER --- */}
       <div className="absolute inset-0 z-0 select-none">
@@ -95,12 +97,12 @@ export function HeroSection() {
         </AnimatePresence>
 
         {/* Stronger Bottom Gradient for Mobile Text Readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 md:via-background/40 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-transparent md:via-background/50" />
+        <div className="absolute inset-0 bg-linear-to-t from-background via-background/60 md:via-background/40 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-background/80 via-transparent to-transparent md:via-background/50" />
 
         {/* Texture & Grid */}
         <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-size-[60px_60px] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
       </div>
 
       {/* --- MAIN CONTENT --- */}
@@ -135,7 +137,7 @@ export function HeroSection() {
               </motion.span>
               <motion.span
                 variants={textRevealVariants}
-                className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-primary bg-[length:200%_auto] animate-gradient pb-1 md:pb-2"
+                className="block text-transparent bg-clip-text bg-linear-to-r from-primary via-white to-primary bg-size-[200%_auto] animate-gradient pb-1 md:pb-2"
               >
                 EXCELLENCE
               </motion.span>
@@ -192,7 +194,7 @@ export function HeroSection() {
           <div className="flex items-center gap-4 mb-5">
             <div className="relative">
               <div className="w-3 h-3 bg-green-500 rounded-full animate-ping absolute top-0 right-0" />
-              <div className="p-3 bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl border border-primary/20">
+              <div className="p-3 bg-linear-to-br from-primary/20 to-primary/5 rounded-xl border border-primary/20">
                 <Gamepad2 className="w-6 h-6 text-primary" />
               </div>
             </div>
