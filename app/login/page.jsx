@@ -56,9 +56,10 @@ export default function LoginPage() {
             const data = await res.json()
             if (!res.ok) throw new Error(data.error || "Login failed")
 
-            toast.success("Welcome back")
+            toast.success("Login successful")
             login(data.token, data.user)
-            router.push("/player/profile")
+            // User requested refresh and redirect to home
+            window.location.href = "/"
         } catch (error) {
             toast.error(error.message || "Invalid credentials")
         } finally {

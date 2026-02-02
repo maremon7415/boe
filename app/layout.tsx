@@ -8,6 +8,9 @@ import { DataProvider } from "@/contexts/data-context"
 import { AuthProvider } from "@/contexts/auth-context"
 import { Suspense } from "react"
 import { Toaster } from "react-hot-toast"
+import { UnderConstructionModal } from "@/components/under-construction-modal"
+import { MobileHeader } from "@/components/mobile-header"
+import { MobileNav } from "@/components/mobile-nav"
 
 export const metadata: Metadata = {
   title: "Brotherhood of Excellence - Elite Gaming Club",
@@ -23,10 +26,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
+      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased pb-16 md:pb-0`}>
         <Suspense fallback={null}>
           <DataProvider>
-            <AuthProvider>{children}</AuthProvider>
+            <AuthProvider>
+              {children}
+              <MobileHeader />
+              <MobileNav />
+              <UnderConstructionModal />
+            </AuthProvider>
           </DataProvider>
         </Suspense>
         <Analytics />
