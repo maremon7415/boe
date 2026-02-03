@@ -9,8 +9,9 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
-import { Loader2, Trophy, Smartphone, Calendar, User as UserIcon, Shield, LogOut, Edit } from "lucide-react"
+import { Loader2, Trophy, Smartphone, Calendar, User as UserIcon, Shield, LogOut, Edit, Facebook, Twitter, Youtube, Disc, Linkedin, Instagram } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
+import { EditProfileModal } from "@/components/edit-profile-modal"
 
 export default function PlayerProfilePage() {
     const { user, loading, logout } = useAuth()
@@ -92,10 +93,15 @@ export default function PlayerProfilePage() {
                                 </div>
 
                                 <div className="w-full mt-6 space-y-3">
-                                    <Button variant="outline" className="w-full h-10 hover:bg-primary/10 hover:text-primary transition-all group/btn" onClick={() => {/* TODO */ }}>
-                                        <Edit className="w-4 h-4 mr-2 group-hover/btn:scale-110 transition-transform" />
-                                        Edit Profile
-                                    </Button>
+                                    <EditProfileModal
+                                        user={user}
+                                        trigger={
+                                            <Button variant="outline" className="w-full h-10 hover:bg-primary/10 hover:text-primary transition-all group/btn">
+                                                <Edit className="w-4 h-4 mr-2 group-hover/btn:scale-110 transition-transform" />
+                                                Edit Profile
+                                            </Button>
+                                        }
+                                    />
                                     <Button variant="ghost" className="w-full h-10 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors" onClick={logout}>
                                         <LogOut className="w-4 h-4 mr-2" />
                                         Sign Out
@@ -189,29 +195,62 @@ export default function PlayerProfilePage() {
                                                     </p>
                                                 </div>
                                             </div>
-                                            {/* Social Links Updated */}
                                             <div className="pt-6 border-t border-border/50">
                                                 <p className="text-muted-foreground text-xs font-semibold uppercase tracking-wider mb-4">Social Connections</p>
-                                                <div className="flex gap-3 flex-wrap">
-                                                    {user.socialAccounts?.facebook && (
+                                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                                    {/* Facebook */}
+                                                    {user.socialAccounts?.facebook ? (
                                                         <a href={user.socialAccounts.facebook} target="_blank" rel="noopener noreferrer"
-                                                            className="flex items-center gap-2 text-xs bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20 border border-[#1877F2]/20 px-3 py-2 rounded-lg transition-colors font-medium">
-                                                            Facebook
+                                                            className="flex flex-col items-center justify-center p-3 rounded-xl bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 hover:scale-105 transition-all border border-blue-500/20 gap-2 group">
+                                                            <Facebook className="w-5 h-5 group-hover:animate-bounce" />
+                                                            <span className="text-xs font-medium">Facebook</span>
                                                         </a>
-                                                    )}
-                                                    {user.socialAccounts?.discord && (
-                                                        <div className="flex items-center gap-2 text-xs bg-[#5865F2]/10 text-[#5865F2] border border-[#5865F2]/20 px-3 py-2 rounded-lg font-medium">
-                                                            Discord: {user.socialAccounts.discord}
+                                                    ) : (
+                                                        <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-muted/20 text-muted-foreground/40 border border-border/30 gap-2 cursor-not-allowed grayscale opacity-60">
+                                                            <Facebook className="w-5 h-5" />
+                                                            <span className="text-xs font-medium">Facebook</span>
                                                         </div>
                                                     )}
-                                                    {user.socialAccounts?.twitter && (
+
+                                                    {/* Twitter / X */}
+                                                    {user.socialAccounts?.twitter ? (
                                                         <a href={`https://twitter.com/${user.socialAccounts.twitter.replace('@', '')}`} target="_blank" rel="noopener noreferrer"
-                                                            className="flex items-center gap-2 text-xs bg-sky-500/10 text-sky-500 hover:bg-sky-500/20 border border-sky-500/20 px-3 py-2 rounded-lg transition-colors font-medium">
-                                                            Twitter
+                                                            className="flex flex-col items-center justify-center p-3 rounded-xl bg-sky-500/10 text-sky-500 hover:bg-sky-500/20 hover:scale-105 transition-all border border-sky-500/20 gap-2 group">
+                                                            <Twitter className="w-5 h-5 group-hover:animate-bounce" />
+                                                            <span className="text-xs font-medium">Twitter</span>
                                                         </a>
+                                                    ) : (
+                                                        <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-muted/20 text-muted-foreground/40 border border-border/30 gap-2 cursor-not-allowed grayscale opacity-60">
+                                                            <Twitter className="w-5 h-5" />
+                                                            <span className="text-xs font-medium">Twitter</span>
+                                                        </div>
                                                     )}
-                                                    {(!user.socialAccounts?.facebook && !user.socialAccounts?.discord && !user.socialAccounts?.twitter) && (
-                                                        <p className="text-sm text-muted-foreground italic">No social accounts linked.</p>
+
+                                                    {/* Discord */}
+                                                    {user.socialAccounts?.discord ? (
+                                                        <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 gap-2 group relative hover:scale-105 transition-transform cursor-help" title={user.socialAccounts.discord}>
+                                                            <Disc className="w-5 h-5 group-hover:animate-spin" />
+                                                            <span className="text-xs font-medium truncate max-w-full px-1">{user.socialAccounts.discord}</span>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-muted/20 text-muted-foreground/40 border border-border/30 gap-2 cursor-not-allowed grayscale opacity-60">
+                                                            <Disc className="w-5 h-5" />
+                                                            <span className="text-xs font-medium">Discord</span>
+                                                        </div>
+                                                    )}
+
+                                                    {/* YouTube */}
+                                                    {user.socialAccounts?.youtube ? (
+                                                        <a href={user.socialAccounts.youtube} target="_blank" rel="noopener noreferrer"
+                                                            className="flex flex-col items-center justify-center p-3 rounded-xl bg-red-500/10 text-red-600 hover:bg-red-500/20 hover:scale-105 transition-all border border-red-500/20 gap-2 group">
+                                                            <Youtube className="w-5 h-5 group-hover:animate-bounce" />
+                                                            <span className="text-xs font-medium">YouTube</span>
+                                                        </a>
+                                                    ) : (
+                                                        <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-muted/20 text-muted-foreground/40 border border-border/30 gap-2 cursor-not-allowed grayscale opacity-60">
+                                                            <Youtube className="w-5 h-5" />
+                                                            <span className="text-xs font-medium">YouTube</span>
+                                                        </div>
                                                     )}
                                                 </div>
                                             </div>

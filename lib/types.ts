@@ -85,6 +85,7 @@ export interface User {
   role: "ADMINISTRATOR" | "ADMIN" | "MEMBER" | "CAPTAIN" | "PENDING";
   clubId?: string;
   avatar?: string;
+  avatarPublicId?: string;
   efootballId?: string;
   device?: {
     name: string;
@@ -99,6 +100,7 @@ export interface User {
   createdAt?: string;
   bloodGroup?: string;
   gender?: string;
+  dob?: string;
   stats?: {
     totalMatch: number;
     win: number;

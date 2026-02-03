@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Loader2, Calendar, Trophy, User as UserIcon, Shield, ChevronLeft, Share2 } from "lucide-react"
+import { Loader2, Calendar, Trophy, User as UserIcon, Shield, ChevronLeft, Share2, Facebook, Twitter, Youtube, Disc, Linkedin, Instagram } from "lucide-react"
 import { motion } from "framer-motion"
 
 interface Player {
@@ -191,6 +191,7 @@ export default function PlayerProfilePage() {
                             <TabsList className="w-full sm:w-auto h-auto justify-start inline-flex sm:flex bg-muted/50 p-1 rounded-xl mb-6">
                                 <TabsTrigger value="overview" className="rounded-lg px-4 sm:px-6 py-2.5">Overview</TabsTrigger>
                                 <TabsTrigger value="matches" className="rounded-lg px-4 sm:px-6 py-2.5">Match History</TabsTrigger>
+                                <TabsTrigger value="achievements" className="rounded-lg px-4 sm:px-6 py-2.5">Achievements</TabsTrigger>
                             </TabsList>
 
                             <TabsContent value="overview" className="space-y-6">
@@ -227,23 +228,65 @@ export default function PlayerProfilePage() {
                                                     </div>
                                                 </div>
 
-                                                {/* Social Links */}
-                                                {(player.socialAccounts && (player.socialAccounts.facebook || player.socialAccounts.discord || player.socialAccounts.twitter)) && (
-                                                    <div className="pt-6 border-t border-border/50">
-                                                        <p className="text-muted-foreground text-xs font-semibold uppercase tracking-wider mb-4">Social Connections</p>
-                                                        <div className="flex gap-3 flex-wrap">
-                                                            {player.socialAccounts.facebook && (
-                                                                <a href={player.socialAccounts.facebook} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2]/20 border border-[#1877F2]/20 px-3 py-2 rounded-lg transition-colors font-medium">Facebook</a>
-                                                            )}
-                                                            {player.socialAccounts.discord && (
-                                                                <div className="flex items-center gap-2 text-xs bg-[#5865F2]/10 text-[#5865F2] border border-[#5865F2]/20 px-3 py-2 rounded-lg font-medium">Discord: {player.socialAccounts.discord}</div>
-                                                            )}
-                                                            {player.socialAccounts.twitter && (
-                                                                <a href={player.socialAccounts.twitter} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs bg-sky-500/10 text-sky-500 hover:bg-sky-500/20 border border-sky-500/20 px-3 py-2 rounded-lg transition-colors font-medium">Twitter</a>
-                                                            )}
-                                                        </div>
+                                                <div className="pt-6 border-t border-border/50">
+                                                    <p className="text-muted-foreground text-xs font-semibold uppercase tracking-wider mb-4">Social Connections</p>
+                                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                                        {/* Facebook */}
+                                                        {player.socialAccounts?.facebook ? (
+                                                            <a href={player.socialAccounts.facebook} target="_blank" rel="noopener noreferrer"
+                                                                className="flex flex-col items-center justify-center p-3 rounded-xl bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 hover:scale-105 transition-all border border-blue-500/20 gap-2 group">
+                                                                <Facebook className="w-5 h-5 group-hover:animate-bounce" />
+                                                                <span className="text-xs font-medium">Facebook</span>
+                                                            </a>
+                                                        ) : (
+                                                            <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-muted/20 text-muted-foreground/40 border border-border/30 gap-2 cursor-not-allowed grayscale opacity-60">
+                                                                <Facebook className="w-5 h-5" />
+                                                                <span className="text-xs font-medium">Facebook</span>
+                                                            </div>
+                                                        )}
+
+                                                        {/* Twitter / X */}
+                                                        {player.socialAccounts?.twitter ? (
+                                                            <a href={`https://twitter.com/${player.socialAccounts.twitter.replace('@', '')}`} target="_blank" rel="noopener noreferrer"
+                                                                className="flex flex-col items-center justify-center p-3 rounded-xl bg-sky-500/10 text-sky-500 hover:bg-sky-500/20 hover:scale-105 transition-all border border-sky-500/20 gap-2 group">
+                                                                <Twitter className="w-5 h-5 group-hover:animate-bounce" />
+                                                                <span className="text-xs font-medium">Twitter</span>
+                                                            </a>
+                                                        ) : (
+                                                            <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-muted/20 text-muted-foreground/40 border border-border/30 gap-2 cursor-not-allowed grayscale opacity-60">
+                                                                <Twitter className="w-5 h-5" />
+                                                                <span className="text-xs font-medium">Twitter</span>
+                                                            </div>
+                                                        )}
+
+                                                        {/* Discord */}
+                                                        {player.socialAccounts?.discord ? (
+                                                            <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 gap-2 group relative hover:scale-105 transition-transform cursor-help" title={player.socialAccounts.discord}>
+                                                                <Disc className="w-5 h-5 group-hover:animate-spin" />
+                                                                <span className="text-xs font-medium truncate max-w-full px-1">{player.socialAccounts.discord}</span>
+                                                            </div>
+                                                        ) : (
+                                                            <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-muted/20 text-muted-foreground/40 border border-border/30 gap-2 cursor-not-allowed grayscale opacity-60">
+                                                                <Disc className="w-5 h-5" />
+                                                                <span className="text-xs font-medium">Discord</span>
+                                                            </div>
+                                                        )}
+
+                                                        {/* YouTube */}
+                                                        {player.socialAccounts?.youtube ? (
+                                                            <a href={player.socialAccounts.youtube} target="_blank" rel="noopener noreferrer"
+                                                                className="flex flex-col items-center justify-center p-3 rounded-xl bg-red-500/10 text-red-600 hover:bg-red-500/20 hover:scale-105 transition-all border border-red-500/20 gap-2 group">
+                                                                <Youtube className="w-5 h-5 group-hover:animate-bounce" />
+                                                                <span className="text-xs font-medium">YouTube</span>
+                                                            </a>
+                                                        ) : (
+                                                            <div className="flex flex-col items-center justify-center p-3 rounded-xl bg-muted/20 text-muted-foreground/40 border border-border/30 gap-2 cursor-not-allowed grayscale opacity-60">
+                                                                <Youtube className="w-5 h-5" />
+                                                                <span className="text-xs font-medium">YouTube</span>
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                )}
+                                                </div>
                                             </CardContent>
                                         </Card>
                                     </motion.div>
@@ -306,6 +349,23 @@ export default function PlayerProfilePage() {
                                         </div>
                                         <h3 className="text-lg font-medium text-foreground mb-1">No detailed match history</h3>
                                         <p className="max-w-xs mx-auto text-sm">Match details are not yet available for public view.</p>
+                                    </CardContent>
+                                </Card>
+                            </TabsContent>
+
+                            <TabsContent value="achievements" className="animate-in fade-in-50 zoom-in-95 duration-300">
+                                <Card className="border-border/60">
+                                    <CardHeader>
+                                        <CardTitle>Trophy Cabinet</CardTitle>
+                                        <CardDescription>Awards and achievements collected by this player.</CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="text-center py-16 text-muted-foreground bg-muted/10">
+                                        <div className="bg-yellow-500/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                            <Trophy className="w-10 h-10 text-yellow-500/50" />
+                                        </div>
+                                        <h3 className="text-lg font-medium text-foreground mb-1">No achievements yet</h3>
+                                        <p className="max-w-xs mx-auto mb-2 text-sm">Compete in tournaments to earn trophies and badges.</p>
+                                        <p className="text-xs text-muted-foreground mt-4 font-medium uppercase tracking-widest">Locked</p>
                                     </CardContent>
                                 </Card>
                             </TabsContent>

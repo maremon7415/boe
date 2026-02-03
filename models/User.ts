@@ -15,6 +15,7 @@ export interface IUser extends Document {
   password: string;
   role: UserRole;
   avatar: string;
+  avatarPublicId?: string;
   efootballId: string;
   device: {
     name: string;
@@ -89,6 +90,10 @@ const userSchema = new Schema<IUser>(
       required: [true, "Device info is required"],
     },
     avatar: {
+      type: String,
+      default: "",
+    },
+    avatarPublicId: {
       type: String,
       default: "",
     },
