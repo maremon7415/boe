@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -40,6 +40,28 @@ export function EditProfileModal({ user, trigger }: EditProfileModalProps) {
     const [imageFile, setImageFile] = useState<File | null>(null)
     const [imagePreview, setImagePreview] = useState<string | null>(user.avatar || null)
 
+    // Reset form data when modal opens
+    useEffect(() => {
+        if (open) {
+            setFormData({
+                fullName: user.fullName || "",
+                email: user.email || "",
+                efootballId: user.efootballId || "",
+                deviceName: user.device?.name || "",
+                deviceModel: user.device?.model || "",
+                dob: user.dob ? new Date(user.dob).toISOString().split('T')[0] : "",
+                bloodGroup: user.bloodGroup || "",
+                gender: user.gender || "",
+                facebook: user.socialAccounts?.facebook || "",
+                twitter: user.socialAccounts?.twitter || "",
+                discord: user.socialAccounts?.discord || "",
+                youtube: user.socialAccounts?.youtube || "",
+            })
+            setImageFile(null)
+            setImagePreview(user.avatar || null)
+        }
+    }, [open])
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target
         setFormData(prev => ({ ...prev, [name]: value }))
@@ -68,6 +90,31 @@ export function EditProfileModal({ user, trigger }: EditProfileModalProps) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsLoading(true)
+
+        // Check for changes
+        const initialDob = user.dob ? new Date(user.dob).toISOString().split('T')[0] : ""
+        const hasChanges =
+            imageFile !== null ||
+            formData.fullName !== (user.fullName || "") ||
+            formData.efootballId !== (user.efootballId || "") ||
+            formData.deviceName !== (user.device?.name || "") ||
+            formData.deviceModel !== (user.device?.model || "") ||
+            formData.dob !== initialDob ||
+            formData.bloodGroup !== (user.bloodGroup || "") ||
+            formData.gender !== (user.gender || "") ||
+            formData.facebook !== (user.socialAccounts?.facebook || "") ||
+            formData.twitter !== (user.socialAccounts?.twitter || "") ||
+            formData.discord !== (user.socialAccounts?.discord || "") ||
+            formData.youtube !== (user.socialAccounts?.youtube || "")
+
+        if (!hasChanges) {
+            toast({
+                title: "No changes",
+                description: "You haven't made any changes to your profile.",
+            })
+            setIsLoading(false)
+            return
+        }
 
         try {
             const errors = []
@@ -99,10 +146,10 @@ export function EditProfileModal({ user, trigger }: EditProfileModalProps) {
             data.append("gender", formData.gender)
 
             // Append social links
-            if (formData.facebook) data.append("facebook", formData.facebook)
-            if (formData.twitter) data.append("twitter", formData.twitter)
-            if (formData.discord) data.append("discord", formData.discord)
-            if (formData.youtube) data.append("youtube", formData.youtube)
+            data.append("facebook", formData.facebook)
+            data.append("twitter", formData.twitter)
+            data.append("discord", formData.discord)
+            data.append("youtube", formData.youtube)
 
             if (imageFile) {
                 data.append("image", imageFile)

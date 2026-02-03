@@ -38,10 +38,14 @@ export default function PlayerProfilePage() {
             <Navbar />
 
             {/* Profile Header Background */}
-            <div className="h-40 md:h-60 w-full bg-linear-to-r from-violet-600/20 via-primary/20 to-blue-600/20 relative overflow-hidden">
-                <div className="absolute inset-0 bg-grid-white/[0.05] mask-[linear-gradient(0deg,white,rgba(255,255,255,0.6))]" />
-                <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-primary/20 rounded-full blur-3xl opacity-50"></div>
-                <div className="absolute top-10 left-10 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl opacity-40"></div>
+            {/* Profile Header Background */}
+            <div className="h-40 md:h-60 w-full relative overflow-hidden group">
+                <div className="absolute inset-0 bg-black/40 z-10" />
+                <img
+                    src="/boe-cover.jpg"
+                    alt="Cover"
+                    className="w-full h-full object-cover absolute inset-0 z-0 group-hover:scale-105 transition-transform duration-700"
+                />
             </div>
 
             <main className="flex-1 container mx-auto px-4 sm:px-6 relative -mt-16 sm:-mt-24 z-10 mb-20">
@@ -61,7 +65,7 @@ export default function PlayerProfilePage() {
                             <CardContent className="flex flex-col items-center px-4 md:px-6">
                                 <div className="relative mb-4">
                                     <div className="absolute -inset-1 bg-linear-to-br from-primary to-purple-600 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-                                    <Avatar className="w-28 h-28 sm:w-32 sm:h-32 border-4 border-background shadow-xl relative">
+                                    <Avatar className="w-28 h-28 sm:w-32 sm:h-32 border-4 border-background shadow-xl relative" key={user.avatar}>
                                         <AvatarImage src={user.avatar || "/placeholder-user.jpg"} alt={user.fullName} className="object-cover" />
                                         <AvatarFallback className="text-3xl font-bold bg-muted">{user.fullName?.substring(0, 2).toUpperCase()}</AvatarFallback>
                                     </Avatar>
