@@ -5,7 +5,13 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
+    localPatterns: [
+      {
+        pathname: "/**",
+        search: "?**",
+      },
+    ],
   },
-}
+};
 
-export default nextConfig
+export default nextConfig;

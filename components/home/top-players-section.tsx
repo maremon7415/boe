@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
-import { Trophy, Medal, Crown, TrendingUp, AlertCircle, Sparkles } from "lucide-react"
+import { Trophy, Medal, Crown, AlertCircle } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { cn } from "@/lib/utils" // Ensure you have a utility for class merging
+import { cn } from "@/lib/utils"
 
 // --- Types ---
 interface Player {
@@ -144,8 +143,8 @@ export function TopPlayersSection() {
   return (
     <section className="py-24 relative overflow-hidden bg-background">
       {/* Cinematic Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
-      <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
+      <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.03] mix-blend-overlay" />
 
       {/* Floating Orbs */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -z-10" />
@@ -170,11 +169,13 @@ export function TopPlayersSection() {
           >
             HALL OF <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-500">CHAMPIONS</span>
           </motion.h2>
+
+          {/* FIX IS HERE: delay moved inside transition */}
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            delay={0.2}
+            transition={{ delay: 0.2 }}
             className="text-lg text-muted-foreground max-w-2xl mx-auto"
           >
             The elite performers of Season 5. Rankings based on points, goal difference, and tactical dominance.

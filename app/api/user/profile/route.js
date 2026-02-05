@@ -58,6 +58,13 @@ export async function PUT(req) {
     }
 
     // Handle Social Accounts Update
+    const currentSocials =
+      user.socialAccounts ?
+        typeof user.socialAccounts.toObject === "function" ?
+          user.socialAccounts.toObject()
+        : user.socialAccounts
+      : {};
+
     if (
       facebook !== null ||
       twitter !== null ||
@@ -65,9 +72,7 @@ export async function PUT(req) {
       youtube !== null
     ) {
       updateData.socialAccounts = {
-        ...user.socialAccounts, // Keep existing if not provided? Or replace?
-        // Usually form provides all current values. Let's assume form sends specific keys.
-        // But to be safe, we merge.
+        ...currentSocials,
       };
       if (facebook !== null) updateData.socialAccounts.facebook = facebook;
       if (twitter !== null) updateData.socialAccounts.twitter = twitter;
@@ -76,7 +81,7 @@ export async function PUT(req) {
     }
 
     // Handle Image Upload
-    if (imageFile && imageFile instanceof File) {
+    if (imageFile && typeof imageFile === "object" && imageFile.size > 0) {
       if (imageFile.size > 5 * 1024 * 1024) {
         // 5MB limit
         return NextResponse.json(
@@ -84,6 +89,8 @@ export async function PUT(req) {
           { status: 400 },
         );
       }
+
+      console.log("Uploading image:", imageFile.name);
 
       const arrayBuffer = await imageFile.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
@@ -100,29 +107,34 @@ export async function PUT(req) {
 
       // Upload new image
       const uploadResult = await new Promise((resolve, reject) => {
-        cloudinary.uploader
-          .upload_stream(
-            {
-              folder: "gaming-club-avatars",
-              resource_type: "image",
-            },
-            (error, result) => {
-              if (error) {
-                reject(error);
-              } else {
-                resolve(result);
-              }
-            },
-          )
-          .end(buffer);
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: "gaming-club-avatars",
+            resource_type: "image",
+          },
+          (error, result) => {
+            if (error) {
+              console.error("Cloudinary upload error:", error);
+              reject(error);
+            } else {
+              resolve(result);
+            }
+          },
+        );
+        uploadStream.end(buffer);
       });
+
+      console.log("Image uploaded:", uploadResult.secure_url);
 
       updateData.avatar = uploadResult.secure_url;
       updateData.avatarPublicId = uploadResult.public_id;
     }
 
+    console.log("Updating user with data:", updateData);
+
     const updatedUser = await User.findByIdAndUpdate(user._id, updateData, {
       new: true,
+      runValidators: true,
     });
 
     return NextResponse.json({
@@ -132,7 +144,7 @@ export async function PUT(req) {
   } catch (error) {
     console.error("Error updating profile:", error);
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: "Internal Server Error: " + error.message },
       { status: 500 },
     );
   }
